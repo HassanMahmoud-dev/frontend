@@ -1,13 +1,12 @@
 <template>
   <div :class="['inline-flex items-center gap-2', containerClass]">
-    <img
-      :src="src"
-      :alt="alt"
-      :style="sizeStyle"
-      :class="['shrink-0 object-contain', imgClass]"
-    />
+    <img :src="src" :alt="alt" :style="sizeStyle" :class="['shrink-0 object-contain', imgClass]" />
 
-    <span v-if="label" :class="['text-sm font-semibold text-slate-900', labelClass]">{{ label }}</span>
+    <span
+      v-if="label"
+      :class="['text-sm font-semibold text-slate-900 dark:text-white', labelClass]"
+      >{{ label }}</span
+    >
   </div>
 </template>
 

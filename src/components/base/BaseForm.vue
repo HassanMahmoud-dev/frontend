@@ -1,17 +1,19 @@
 <template>
   <form
     :class="[
-      'rounded-xl border border-slate-200 bg-white p-4 md:p-6',
-      disabled ? 'pointer-events-none opacity-60' : '',
+      'w-full transition-all duration-200',
+      loading || disabled ? 'opacity-70 pointer-events-none' : '',
       formClass,
     ]"
-    @submit.prevent="onSubmit"
+    @submit.prevent="handleSubmit"
   >
-    <div :class="['grid gap-4', contentClass]">
+    <!-- Form Content Slot -->
+    <div :class="['space-y-5', contentClass]">
       <slot />
     </div>
 
-    <div v-if="$slots.actions" :class="['mt-6 flex items-center justify-end gap-2', actionsClass]">
+    <!-- Form Actions Slot (Buttons, etc.) -->
+    <div v-if="$slots.actions" :class="['mt-8 flex items-center gap-3', actionsClass]">
       <slot name="actions" :loading="loading" :disabled="disabled" />
     </div>
   </form>
@@ -30,19 +32,16 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   disabled: false,
   formClass: '',
-  contentClass: '',
-  actionsClass: '',
+  contentClass: 'space-y-4',
+  actionsClass: 'flex-row-reverse',
 })
 
 const emit = defineEmits<{
   submit: [event: Event]
 }>()
 
-const onSubmit = (event: Event) => {
-  if (props.loading || props.disabled) {
-    return
-  }
-
+const handleSubmit = (event: Event) => {
+  if (props.loading || props.disabled) return
   emit('submit', event)
 }
 </script>

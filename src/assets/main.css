@@ -1,1 +1,47 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --swal-bg: theme('colors.white');
+    --swal-text: theme('colors.slate.900');
+  }
+
+  .dark {
+    --swal-bg: theme('colors.slate.900');
+    --swal-text: theme('colors.slate.100');
+  }
+}
+
+/* SweetAlert2 Dark Mode Overrides */
+.swal2-popup {
+  background: var(--swal-bg) !important;
+  color: var(--swal-text) !important;
+}
+
+.swal2-title,
+.swal2-html-container {
+  color: var(--swal-text) !important;
+}
+
+.swal2-confirm {
+  background-color: theme('colors.blue.600') !important;
+}
+
+.swal2-cancel {
+  background-color: theme('colors.slate.500') !important;
+}
+
+.dark .swal2-confirm {
+  background-color: theme('colors.blue.500') !important;
+}
+
+.dark .swal2-cancel {
+  background-color: theme('colors.slate.700') !important;
+}
+
+/* Base transitions */
+* {
+  @apply transition-colors duration-200;
+}

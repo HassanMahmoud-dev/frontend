@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="border-b border-slate-200">
+    <div class="border-b border-slate-200 dark:border-slate-800">
       <nav class="flex flex-wrap gap-2" aria-label="Tabs">
         <button
           v-for="tab in tabs"
@@ -10,9 +10,11 @@
           :class="[
             'inline-flex items-center border-b-2 px-3 py-2 text-sm font-medium transition',
             isActive(tab.value)
-              ? 'border-slate-900 text-slate-900'
-              : 'border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900',
-            tab.disabled ? 'cursor-not-allowed opacity-50 hover:border-transparent hover:text-slate-600' : '',
+              ? 'border-slate-900 text-slate-900 dark:border-white dark:text-white'
+              : 'border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:text-slate-200',
+            tab.disabled
+              ? 'cursor-not-allowed opacity-50 hover:border-transparent hover:text-slate-600 dark:text-slate-600'
+              : '',
           ]"
           @click="setActive(tab.value)"
         >
