@@ -1,5 +1,6 @@
 <template>
   <form
+    :id="id"
     :class="[
       'w-full transition-all duration-200',
       loading || disabled ? 'opacity-70 pointer-events-none' : '',
@@ -21,6 +22,7 @@
 
 <script setup lang="ts">
 interface Props {
+  id?: string
   loading?: boolean
   disabled?: boolean
   formClass?: string
@@ -29,6 +31,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  id: '',
   loading: false,
   disabled: false,
   formClass: '',

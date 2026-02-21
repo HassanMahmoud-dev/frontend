@@ -43,10 +43,34 @@
         </section>
 
         <footer
-          v-if="$slots.footer"
+          v-if="showFooter || $slots.footer"
           class="border-t border-slate-200 px-5 py-4 dark:border-slate-800"
         >
-          <slot name="footer" :close="close" />
+          <slot name="footer" :close="close">
+            <div class="flex justify-end gap-3">
+              <button
+                type="button"
+                :disabled="loading"
+                class="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
+                @click="$emit('confirm')"
+              >
+                <span
+                  v-if="loading"
+                  class="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                ></span>
+                <i v-else-if="confirmIcon" :class="['bi', confirmIcon]"></i>
+                {{ confirmLabel || 'تأكيد' }}
+              </button>
+              <button
+                type="button"
+                class="inline-flex items-center justify-center gap-2 rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                @click="close"
+              >
+                <i v-if="cancelIcon" :class="['bi', cancelIcon]"></i>
+                {{ cancelLabel || 'إلغاء' }}
+              </button>
+            </div>
+          </slot>
         </footer>
       </div>
     </div>
@@ -54,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, watch } from 'vue'
+import { computed, onUnmounted, watch } from 'vue'
 
 type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full'
 
@@ -65,6 +89,12 @@ interface Props {
   closeOnBackdrop?: boolean
   closeOnEsc?: boolean
   showClose?: boolean
+  showFooter?: boolean
+  confirmLabel?: string
+  cancelLabel?: string
+  confirmIcon?: string
+  cancelIcon?: string
+  loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -73,11 +103,18 @@ const props = withDefaults(defineProps<Props>(), {
   closeOnBackdrop: true,
   closeOnEsc: true,
   showClose: true,
+  showFooter: false,
+  confirmLabel: '',
+  cancelLabel: '',
+  confirmIcon: 'bi-check-lg',
+  cancelIcon: 'bi-x-lg',
+  loading: false,
 })
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
   close: []
+  confirm: []
 }>()
 
 const sizeClass = computed(() => {
@@ -131,7 +168,7 @@ watch(
   { immediate: true },
 )
 
-onBeforeUnmount(() => {
+onUnmounted(() => {
   window.removeEventListener('keydown', onEscape)
   document.body.style.overflow = ''
 })

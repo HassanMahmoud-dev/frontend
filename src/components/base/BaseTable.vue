@@ -73,7 +73,7 @@
                 <template v-if="column.key === 'ACTIONS'">
                   <div class="flex items-center gap-2">
                     <button
-                      v-if="showEditAction"
+                      v-if="showEditAction && (!isEditVisible || isEditVisible(row))"
                       @click="$emit('edit', row)"
                       class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors p-1"
                       title="تعديل"
@@ -81,7 +81,7 @@
                       <i class="bi bi-pencil-square text-lg"></i>
                     </button>
                     <button
-                      v-if="showDeleteAction"
+                      v-if="showDeleteAction && (!isDeleteVisible || isDeleteVisible(row))"
                       @click="$emit('delete', row)"
                       class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors p-1"
                       title="حذف"
@@ -98,6 +98,53 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div
+      v-if="showPagination"
+      class="px-4 py-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex flex-col sm:flex-row items-center justify-between gap-4"
+    >
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-slate-600 dark:text-slate-400">عدد العناصر في الصفحة:</span>
+        <select
+          :value="limit"
+          @change="(e) => $emit('update:limit', Number((e.target as HTMLSelectElement).value))"
+          class="text-sm border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-md py-1 px-2 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option :value="10">10</option>
+          <option :value="50">50</option>
+          <option :value="100">100</option>
+          <option :value="200">200</option>
+          <option :value="500">500</option>
+        </select>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <span class="text-sm text-slate-600 dark:text-slate-400">
+          عرض {{ total === 0 ? 0 : (page - 1) * limit + 1 }} إلى
+          {{ Math.min(page * limit, total) }} من {{ total }} عنصر
+        </span>
+        <div class="flex gap-1 items-center">
+          <button
+            @click="$emit('update:page', page - 1)"
+            :disabled="page <= 1"
+            class="px-2 py-1 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+          >
+            السابق
+          </button>
+          <span
+            class="text-sm font-medium px-3 py-1 bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 rounded"
+          >
+            {{ page }}
+          </span>
+          <button
+            @click="$emit('update:page', page + 1)"
+            :disabled="page >= totalPages"
+            class="px-2 py-1 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+          >
+            التالي
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -119,6 +166,13 @@ interface Props {
   emptyText?: string
   showEditAction?: boolean
   showDeleteAction?: boolean
+  isEditVisible?: (row: T) => boolean
+  isDeleteVisible?: (row: T) => boolean
+  showPagination?: boolean
+  total?: number
+  page?: number
+  limit?: number
+  totalPages?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -128,11 +182,18 @@ const props = withDefaults(defineProps<Props>(), {
   emptyText: 'لا يوجد بيانات لعرضها.',
   showEditAction: true,
   showDeleteAction: true,
+  showPagination: false,
+  total: 0,
+  page: 1,
+  limit: 50,
+  totalPages: 1,
 })
 
 defineEmits<{
   (e: 'edit', row: T): void
   (e: 'delete', row: T): void
+  (e: 'update:page', page: number): void
+  (e: 'update:limit', limit: number): void
 }>()
 
 const getRowKey = (row: T, index: number) => {

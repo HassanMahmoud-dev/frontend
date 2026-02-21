@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import defaultLogo from '../../assets/logo.svg'
+import defaultLogo from '@/assets/logo.svg'
 
 interface Props {
   src?: string

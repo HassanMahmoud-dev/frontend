@@ -7,6 +7,8 @@ export interface SystemUser {
   AVATAR?: string | null
   ROLE: 'admin' | 'employee'
   CREATED_AT: string
+  IS_ACTIVE?: string | null
+  LAST_LOGIN?: string | null
 }
 
 export interface CreateUserDTO {
@@ -17,8 +19,24 @@ export interface CreateUserDTO {
   EMAIL?: string
   AVATAR?: string | File | null
   ROLE: 'admin' | 'employee'
+  IS_ACTIVE?: string | null
 }
 
 export interface UpdateUserDTO extends Partial<CreateUserDTO> {
   USER_ID: number
+}
+
+export interface ConnectedSession {
+  TOKEN_ID: number
+  DEVICE_INFO?: string
+  IP_ADDRESS?: string
+  CREATED_AT: string
+  EXPIRES_AT: string
+  user: {
+    USER_ID: number
+    USERNAME: string
+    ROLE: 'admin' | 'employee'
+    AVATAR?: string | null
+    FULL_NAME?: string
+  }
 }

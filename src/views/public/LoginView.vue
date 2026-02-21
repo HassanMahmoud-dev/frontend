@@ -63,6 +63,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth.store'
+import type { AxiosError } from 'axios'
+import swalService from '@/services/swal.service'
 import BaseForm from '@/components/base/BaseForm.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 
@@ -80,8 +82,11 @@ const handleLogin = async () => {
   isLoading.value = true
   try {
     await authStore.login(username.value, password.value)
-  } catch (error) {
+  } catch (err) {
+    const error = err as AxiosError<{ message: string }>
     console.error('Login error:', error)
+    const message = error.response?.data?.message || 'حدث خطأ أثناء تسجيل الدخول'
+    swalService.error(message)
   } finally {
     isLoading.value = false
   }

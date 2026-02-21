@@ -59,11 +59,19 @@
         </div>
 
         <!-- Form Fields -->
+        <div class="px-1 mb-4">
+          <p class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+            <span class="text-red-500 font-bold">*</span>
+            <span>الحقول المميزة بهذه العلامة اجبارية</span>
+          </p>
+        </div>
+
         <div class="space-y-4">
           <BaseInput
             label="الاسم الكامل"
             v-model="formData.fullName"
             placeholder="أدخل اسمك الكامل"
+            required
           />
 
           <BaseInput
@@ -105,7 +113,7 @@ import { ref, reactive, onMounted, computed } from 'vue'
 import type { AxiosError } from 'axios'
 import { useAuthStore } from '@/stores/auth.store'
 import api, { BASE_URL } from '@/services/api'
-import Swal from 'sweetalert2'
+import swalService from '@/services/swal.service'
 import BaseForm from '@/components/base/BaseForm.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 
@@ -173,11 +181,7 @@ const handleFileChange = (event: Event) => {
 const handleSubmit = async () => {
   // Validate password confirmation
   if (formData.password && formData.password !== formData.confirmPassword) {
-    Swal.fire({
-      icon: 'error',
-      title: 'خطأ',
-      text: 'كلمات المرور غير متطابقة',
-    })
+    swalService.error('كلمات المرور غير متطابقة')
     return
   }
 
@@ -209,22 +213,12 @@ const handleSubmit = async () => {
       selectedFile.value = null
       isAvatarRemoved.value = false
 
-      await Swal.fire({
-        icon: 'success',
-        title: 'تم الحفظ',
-        text: 'تم تحديث الملف الشخصي بنجاح',
-        timer: 1500,
-        showConfirmButton: false,
-      })
+      swalService.success('تم تحديث الملف الشخصي بنجاح')
     }
   } catch (err) {
     const error = err as AxiosError<{ message: string }>
     console.error('Update profile error:', error)
-    Swal.fire({
-      icon: 'error',
-      title: 'خطأ',
-      text: error.response?.data?.message || 'حدث خطأ أثناء تحديث الملف الشخصي',
-    })
+    swalService.error(error.response?.data?.message || 'حدث خطأ أثناء تحديث الملف الشخصي')
   } finally {
     loading.value = false
   }

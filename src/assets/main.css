@@ -25,22 +25,6 @@
   color: var(--swal-text) !important;
 }
 
-.swal2-confirm {
-  background-color: theme('colors.blue.600') !important;
-}
-
-.swal2-cancel {
-  background-color: theme('colors.slate.500') !important;
-}
-
-.dark .swal2-confirm {
-  background-color: theme('colors.blue.500') !important;
-}
-
-.dark .swal2-cancel {
-  background-color: theme('colors.slate.700') !important;
-}
-
 /* Base transitions */
 * {
   @apply transition-colors duration-200;

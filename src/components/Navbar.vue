@@ -15,7 +15,7 @@
         </RouterLink>
         <RouterLink
           v-if="authStore.isAdmin"
-          to="/users"
+          to="/system/users"
           class="rounded-md px-3 py-2 text-slate-600 transition hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100"
           active-class="bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 active-link"
         >
@@ -60,7 +60,7 @@
             class="absolute left-0 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-slate-900 dark:ring-slate-700 z-50"
           >
             <RouterLink
-              to="/profile"
+              to="/system/profile"
               class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
               @click="isDropdownOpen = false"
             >

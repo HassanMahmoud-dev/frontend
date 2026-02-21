@@ -2,8 +2,8 @@ import axios, { type AxiosResponse } from 'axios'
 import swalService from './swal.service'
 import type { BaseResponse } from '@/types/api'
 
-export const API_URL = 'http://localhost:5000/api'
-export const BASE_URL = 'http://localhost:5000'
+export const API_URL = 'http://192.168.1.13:5000/api'
+export const BASE_URL = 'http://192.168.1.13:5000'
 
 const api = axios.create({
   baseURL: API_URL,

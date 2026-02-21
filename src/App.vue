@@ -13,15 +13,30 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router'
 import Navbar from './components/Navbar.vue'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useThemeStore } from '@/stores/theme.store'
+import { useAuthStore } from '@/stores/auth.store'
+import { initSocket, disconnectSocket } from '@/services/socket.service'
 
 const route = useRoute()
 useThemeStore() // Initialize theme store to trigger watcher
+const authStore = useAuthStore()
 const showNavbar = computed(() => !route.meta.guest)
 
 onMounted(() => {
-  // Theme is already applied by the watcher with immediate: true
-  // but we can ensure it here if needed.
+  if (authStore.isAuthenticated) {
+    initSocket()
+  }
+
+  watch(
+    () => authStore.isAuthenticated,
+    (isAuth) => {
+      if (isAuth) {
+        initSocket()
+      } else {
+        disconnectSocket()
+      }
+    },
+  )
 })
 </script>
