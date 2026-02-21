@@ -3,7 +3,9 @@
     class="border-b border-slate-200 bg-white px-4 py-3 transition-colors duration-300 md:px-6 dark:border-slate-800 dark:bg-slate-950"
   >
     <div class="flex items-center justify-between">
-      <BaseLogo :width="150" :height="44" />
+      <RouterLink to="/">
+        <BaseLogo :width="150" :height="44" />
+      </RouterLink>
       <nav class="flex items-center gap-2 text-sm">
         <ThemeToggle />
         <RouterLink
