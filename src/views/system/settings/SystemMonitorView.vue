@@ -236,7 +236,7 @@ import {
   type ApiRoute,
   type SystemMetrics,
   type SystemFault,
-} from '@/services/APIs/system.service'
+} from '@/services/APIs/system/system.service'
 import swalService from '@/services/swal.service'
 
 const activeTab = ref('api')

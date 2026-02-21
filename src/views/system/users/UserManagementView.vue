@@ -339,7 +339,7 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.store'
-import { userService, type PaginationData } from '@/services/APIs/user.service'
+import { userService, type PaginationData } from '@/services/APIs/system/user.service'
 import type { SystemUser, ConnectedSession } from '@/types/user'
 import swalService from '@/services/swal.service'
 import BaseForm from '@/components/base/BaseForm.vue'
