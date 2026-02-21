@@ -21,6 +21,14 @@
         >
           المستخدمين
         </RouterLink>
+        <RouterLink
+          v-if="authStore.isAdmin"
+          to="/system/settings/system-monitor"
+          class="rounded-md px-3 py-2 text-slate-600 transition hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+          active-class="bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 active-link"
+        >
+          مراقب النظام
+        </RouterLink>
         <div class="relative" ref="dropdownRef">
           <button
             v-if="authStore.isAuthenticated && authStore.user"

@@ -1,115 +1,214 @@
 <template>
-  <div class="container mx-auto max-w-2xl px-4 py-8">
-    <div class="mb-8 text-center">
-      <h1 class="text-3xl font-bold text-slate-800 dark:text-white">الملف الشخصي</h1>
-      <p class="mt-2 text-slate-600 dark:text-slate-400">تعديل معلوماتك الشخصية</p>
-    </div>
-
+  <div class="container mx-auto">
+    <!-- Header Section -->
     <div
-      class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950"
+      class="relative mb-12 overflow-hidden rounded-3xl bg-blue-600 p-8 text-white shadow-xl dark:bg-blue-900"
     >
-      <BaseForm :loading="loading" @submit="handleSubmit">
-        <!-- Avatar Upload -->
-        <div class="mb-8 flex flex-col items-center gap-4">
-          <div class="relative">
-            <div
-              class="relative h-32 w-32 overflow-hidden rounded-full ring-4 ring-slate-100 dark:ring-slate-800"
-            >
-              <img
-                v-if="shouldShowAvatar"
-                :src="previewAvatar || getImageUrl(authStore.user?.avatar!)"
-                class="h-full w-full object-cover"
-                alt="Profile"
-              />
-              <div
-                v-else
-                class="flex h-full w-full items-center justify-center bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
-              >
-                <i class="bi bi-person text-6xl"></i>
-              </div>
+      <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-blue-500/20 blur-3xl"></div>
+      <div
+        class="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-blue-400/10 blur-3xl"
+      ></div>
 
-              <label
-                class="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/40 text-white opacity-0 transition-opacity hover:opacity-100"
-              >
-                <i class="bi bi-camera-fill text-2xl"></i>
-                <input type="file" class="hidden" accept="image/*" @change="handleFileChange" />
-              </label>
+      <div class="relative flex flex-col items-center gap-6 md:flex-row md:items-end">
+        <!-- Avatar Section -->
+        <div class="group relative">
+          <div
+            class="h-32 w-32 overflow-hidden rounded-2xl border-4 border-white/20 bg-white/10 backdrop-blur-sm transition-transform duration-300 hover:scale-105 dark:border-white/10"
+          >
+            <img
+              v-if="shouldShowAvatar"
+              :src="previewAvatar || getImageUrl(authStore.user?.avatar!)"
+              class="h-full w-full object-cover"
+              alt="Profile"
+            />
+            <div v-else class="flex h-full w-full items-center justify-center text-white/60">
+              <i class="bi bi-person text-6xl"></i>
             </div>
 
-            <!-- Remove Avatar Button -->
-            <button
-              v-if="hasAvatar"
-              type="button"
-              @click="handleRemoveAvatar"
-              class="absolute bottom-0 right-0 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-red-100 text-red-600 shadow-md ring-2 ring-white transition hover:bg-red-200 dark:bg-red-900/80 dark:text-red-300 dark:ring-slate-900"
-              title="إزالة الصورة"
+            <label
+              class="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/40 opacity-0 transition-opacity hover:opacity-100"
             >
-              <i class="bi bi-trash text-lg"></i>
-            </button>
+              <i class="bi bi-camera-fill text-2xl text-white"></i>
+              <input type="file" class="hidden" accept="image/*" @change="handleFileChange" />
+            </label>
           </div>
 
-          <div v-if="authStore.user" class="text-center">
-            <h3 class="text-lg font-semibold text-slate-800 dark:text-white">
-              {{ authStore.user.username }}
-            </h3>
-            <span class="text-sm text-slate-500 dark:text-slate-400">
-              {{ getUserRole(authStore.user.role) }}
-            </span>
-          </div>
+          <button
+            v-if="hasAvatar"
+            type="button"
+            @click="handleRemoveAvatar"
+            class="absolute -bottom-2 -right-2 flex h-8 w-8 items-center justify-center rounded-lg bg-red-500 text-white shadow-lg transition-transform hover:scale-110"
+            title="إزالة الصورة"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
         </div>
 
-        <!-- Form Fields -->
-        <div class="px-1 mb-4">
-          <p class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
-            <span class="text-red-500 font-bold">*</span>
-            <span>الحقول المميزة بهذه العلامة اجبارية</span>
+        <div class="flex-1 text-center md:text-right">
+          <h1 class="text-3xl font-bold">
+            {{ authStore.user?.fullName || authStore.user?.username }}
+          </h1>
+          <p class="mt-1 text-blue-100 opacity-80">
+            {{ getUserRole(authStore.user?.role || '') }}
           </p>
         </div>
+      </div>
+    </div>
 
-        <div class="space-y-4">
-          <BaseInput
-            label="الاسم الكامل"
-            v-model="formData.fullName"
-            placeholder="أدخل اسمك الكامل"
-            required
-          />
-
-          <BaseInput
-            label="كلمة المرور الجديدة"
-            type="password"
-            v-model="formData.password"
-            placeholder="اتركه فارغاً إذا كنت لا تريد تغيير كلمة المرور"
-          />
-
-          <BaseInput
-            label="تأكيد كلمة المرور"
-            type="password"
-            v-model="formData.confirmPassword"
-            placeholder="أعد إدخال كلمة المرور "
-          />
+    <div class="grid gap-8 lg:grid-cols-3">
+      <!-- Sidebar Info -->
+      <div class="space-y-6">
+        <div
+          class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950"
+        >
+          <h3 class="mb-4 text-lg font-bold text-slate-800 dark:text-white">معلومات الحساب</h3>
+          <div class="space-y-4 text-sm">
+            <div class="flex items-center gap-3">
+              <div
+                class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+              >
+                <i class="bi bi-person-badge"></i>
+              </div>
+              <div>
+                <p class="text-slate-500">اسم المستخدم</p>
+                <p class="font-medium text-slate-800 dark:text-slate-200">
+                  @{{ authStore.user?.username }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div
+                class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+              >
+                <i class="bi bi-envelope"></i>
+              </div>
+              <div>
+                <p class="text-slate-500">البريد الإلكتروني</p>
+                <p class="font-medium text-slate-800 dark:text-slate-200">
+                  {{ authStore.user?.email || 'غير محدد' }}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <!-- Actions -->
-        <template #actions="{ loading }">
-          <button
-            type="submit"
-            :disabled="loading"
-            class="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2.5 font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
-          >
-            <span
-              v-if="loading"
-              class="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
-            ></span>
-            <span>حفظ التغييرات</span>
-          </button>
-        </template>
-      </BaseForm>
+      <!-- Main Form -->
+      <div class="lg:col-span-2">
+        <div
+          class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950"
+        >
+          <div class="border-b border-slate-100 p-6 dark:border-slate-800">
+            <h2 class="text-xl font-bold text-slate-800 dark:text-white text-center">
+              تعديل البيانات
+            </h2>
+          </div>
+
+          <div class="p-6">
+            <BaseForm :loading="loading" @submit="handleSubmit">
+              <div class="space-y-8">
+                <!-- Personal Info Section -->
+                <section>
+                  <div class="mb-4 flex items-center gap-2 text-blue-600 dark:text-blue-400">
+                    <i class="bi bi-person-fill"></i>
+                    <h3 class="font-bold">المعلومات الشخصية</h3>
+                  </div>
+                  <div class="grid gap-4 sm:grid-cols-2">
+                    <!-- Username (Read-only) -->
+                    <BaseInput
+                      label="اسم المستخدم"
+                      :modelValue="authStore.user?.username || ''"
+                      disabled
+                      placeholder="لا يمكن تغيير اسم المستخدم"
+                    />
+                    <!-- Email (Read-only) -->
+                    <BaseInput
+                      label="البريد الإلكتروني"
+                      :modelValue="authStore.user?.email || ''"
+                      disabled
+                      placeholder="لا يمكن تغيير البريد الإلكتروني"
+                    />
+                    <BaseInput
+                      label="الاسم الكامل"
+                      v-model="formData.fullName"
+                      placeholder="أدخل اسمك الكامل"
+                      required
+                    />
+                    <BaseInput
+                      label="رقم الهاتف"
+                      v-model="formData.phoneNumber"
+                      type="tel"
+                      placeholder="أدخل رقم هاتفك"
+                    />
+                  </div>
+                </section>
+
+                <!-- Security Section -->
+                <section>
+                  <div class="mb-4 flex items-center gap-2 text-blue-600 dark:text-blue-400">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    <h3 class="font-bold">الأمان</h3>
+                  </div>
+                  <div class="grid gap-4 sm:grid-cols-2">
+                    <BaseInput
+                      label="كلمة المرور الجديدة"
+                      type="password"
+                      v-model="formData.password"
+                      placeholder="اتركه فارغاً للحفاظ على الحالية"
+                    />
+                    <BaseInput
+                      label="تأكيد كلمة المرور"
+                      type="password"
+                      v-model="formData.confirmPassword"
+                      placeholder="أعد إدخال كلمة المرور"
+                    />
+                  </div>
+                </section>
+              </div>
+
+              <!-- Actions -->
+              <template #actions="{ loading }">
+                <div class="mt-8 flex flex-wrap justify-center gap-4">
+                  <!-- Save Button -->
+                  <button
+                    type="submit"
+                    :disabled="loading || !hasChanges"
+                    class="flex min-w-[200px] items-center justify-center gap-2 rounded-xl px-8 py-3 font-semibold text-white shadow-lg transition-all active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:active:scale-100"
+                    :class="[
+                      hasChanges
+                        ? 'bg-blue-600 shadow-blue-200 hover:bg-blue-700 hover:shadow-blue-300 dark:shadow-none'
+                        : 'bg-slate-400 dark:bg-slate-700',
+                    ]"
+                  >
+                    <span
+                      v-if="loading"
+                      class="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"
+                    ></span>
+                    <i v-else class="bi bi-check-circle"></i>
+                    <span>حفظ التغييرات</span>
+                  </button>
+                  <!-- Cancel Button -->
+                  <button
+                    type="button"
+                    @click="goBack"
+                    class="flex min-w-[140px] items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-600 shadow-sm transition-all hover:bg-slate-50 hover:text-slate-800 active:scale-95 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800"
+                  >
+                    <i class="bi bi-x-circle"></i>
+                    <span>إلغاء</span>
+                  </button>
+                </div>
+              </template>
+            </BaseForm>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import type { AxiosError } from 'axios'
 import { useAuthStore } from '@/stores/auth.store'
 import api, { BASE_URL } from '@/services/api'
@@ -118,6 +217,7 @@ import BaseForm from '@/components/base/BaseForm.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 
 const authStore = useAuthStore()
+const router = useRouter()
 const loading = ref(false)
 const previewAvatar = ref<string | null>(null)
 const selectedFile = ref<File | null>(null)
@@ -125,13 +225,30 @@ const isAvatarRemoved = ref(false)
 
 const formData = reactive({
   fullName: '',
+  phoneNumber: '',
   password: '',
   confirmPassword: '',
 })
 
+const hasChanges = computed(() => {
+  if (!authStore.user) return false
+
+  const nameChanged = formData.fullName !== (authStore.user.fullName || '')
+  const phoneChanged = formData.phoneNumber !== (authStore.user.phoneNumber || '')
+  const passwordEntered = formData.password.length > 0
+  const avatarChanged = !!selectedFile.value || isAvatarRemoved.value
+
+  return nameChanged || phoneChanged || passwordEntered || avatarChanged
+})
+
+const goBack = () => {
+  router.back()
+}
+
 onMounted(() => {
   if (authStore.user) {
     formData.fullName = authStore.user.fullName || ''
+    formData.phoneNumber = authStore.user.phoneNumber || ''
   }
 })
 
@@ -189,7 +306,9 @@ const handleSubmit = async () => {
   try {
     const data = new FormData()
     if (formData.fullName) data.append('fullName', formData.fullName)
+    if (formData.phoneNumber) data.append('phoneNumber', formData.phoneNumber)
     if (formData.password) data.append('password', formData.password)
+
     if (selectedFile.value) {
       data.append('AVATAR', selectedFile.value)
     } else if (isAvatarRemoved.value) {

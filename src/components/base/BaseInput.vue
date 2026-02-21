@@ -9,37 +9,12 @@
       {{ label }}
       <span v-if="required" class="inline-flex items-center ms-1">
         <!-- Success Icon (Blue Check) -->
-        <svg
+        <i
           v-if="hasValue"
-          class="w-3.5 h-3.5 text-blue-500 transition-all duration-300 scale-110"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="3"
-            d="M5 13l4 4L19 7"
-          ></path>
-        </svg>
+          class="bi bi-check-lg text-blue-500 transition-all duration-300 scale-110"
+        ></i>
         <!-- Required Icon (Red Alert) -->
-        <svg
-          v-else
-          class="w-3.5 h-3.5 text-red-500 transition-all duration-300"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2.5"
-            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          ></path>
-        </svg>
+        <i v-else class="bi bi-exclamation-circle text-red-500 transition-all duration-300"></i>
       </span>
     </label>
 
@@ -144,11 +119,7 @@
         v-if="type === 'select'"
         class="pointer-events-none absolute inset-y-0 left-3 flex items-center px-2 text-slate-500"
       >
-        <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
-          <path
-            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-          />
-        </svg>
+        <i class="bi bi-chevron-down text-slate-500"></i>
       </div>
     </div>
 

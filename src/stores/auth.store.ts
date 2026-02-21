@@ -8,6 +8,8 @@ interface User {
   userId: number
   username: string
   fullName?: string
+  email?: string
+  phoneNumber?: string
   avatar?: string
   role: 'admin' | 'employee'
 }

@@ -17,8 +17,8 @@ const router = createRouter({
       meta: { guest: true },
     },
     {
-      path: '/profile',
-      name: 'profile',
+      path: '/system/profile',
+      name: 'system-profile',
       component: () => import('@/views/system/users/ProfileView.vue'),
       meta: { requiresAuth: true },
     },
@@ -26,6 +26,12 @@ const router = createRouter({
       path: '/system/users',
       name: 'users',
       component: () => import('@/views/system/users/UserManagementView.vue'),
+      meta: { requiresAuth: true, adminOnly: true },
+    },
+    {
+      path: '/system/settings/system-monitor',
+      name: 'system-monitor',
+      component: () => import('@/views/system/settings/SystemMonitorView.vue'),
       meta: { requiresAuth: true, adminOnly: true },
     },
   ],
