@@ -117,6 +117,7 @@
               empty-text="لا توجد APIs لعرضها"
               :show-edit-action="false"
               :show-delete-action="false"
+              @refresh="fetchData"
             >
               <template #cell-path="{ value }">
                 <code
@@ -176,6 +177,7 @@
               empty-text="لا توجد أعطال مسجلة حالياً"
               :show-edit-action="false"
               :show-delete-action="false"
+              @refresh="fetchData"
             >
               <template #cell-timestamp="{ value }">
                 <span class="text-xs text-slate-500">{{ formatDate(value) }}</span>

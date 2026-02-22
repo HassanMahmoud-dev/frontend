@@ -8,29 +8,6 @@
       </RouterLink>
       <nav class="flex items-center gap-2 text-sm">
         <ThemeToggle />
-        <RouterLink
-          to="/"
-          class="rounded-md px-3 py-2 text-slate-600 transition hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100"
-          active-class="bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 active-link"
-        >
-          الرئيسية
-        </RouterLink>
-        <RouterLink
-          v-if="authStore.isAdmin"
-          to="/system/users"
-          class="rounded-md px-3 py-2 text-slate-600 transition hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100"
-          active-class="bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 active-link"
-        >
-          المستخدمين
-        </RouterLink>
-        <RouterLink
-          v-if="authStore.isAdmin"
-          to="/system/settings/system-monitor"
-          class="rounded-md px-3 py-2 text-slate-600 transition hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100"
-          active-class="bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 active-link"
-        >
-          مراقب النظام
-        </RouterLink>
         <div class="relative" ref="dropdownRef">
           <button
             v-if="authStore.isAuthenticated && authStore.user"

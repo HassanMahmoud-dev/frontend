@@ -2,6 +2,18 @@
   <div
     class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm"
   >
+    <div v-if="showRefreshButton" class="px-4 py-3 border-b border-slate-200 dark:border-slate-800">
+      <div class="flex justify-end">
+        <button
+          @click="$emit('refresh')"
+          :disabled="loading"
+          class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          <i class="bi" :class="loading ? 'bi-arrow-repeat animate-spin' : 'bi-arrow-clockwise'"></i>
+          {{ refreshButtonLabel }}
+        </button>
+      </div>
+    </div>
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
         <thead class="bg-slate-50 dark:bg-slate-800/50">
@@ -173,6 +185,8 @@ interface Props {
   page?: number
   limit?: number
   totalPages?: number
+  showRefreshButton?: boolean
+  refreshButtonLabel?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -187,6 +201,8 @@ const props = withDefaults(defineProps<Props>(), {
   page: 1,
   limit: 50,
   totalPages: 1,
+  showRefreshButton: true,
+  refreshButtonLabel: 'تحديث البيانات',
 })
 
 defineEmits<{
@@ -194,6 +210,7 @@ defineEmits<{
   (e: 'delete', row: T): void
   (e: 'update:page', page: number): void
   (e: 'update:limit', limit: number): void
+  (e: 'refresh'): void
 }>()
 
 const getRowKey = (row: T, index: number) => {

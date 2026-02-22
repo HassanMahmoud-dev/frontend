@@ -34,6 +34,18 @@ const router = createRouter({
       component: () => import('@/views/system/settings/SystemMonitorView.vue'),
       meta: { requiresAuth: true, adminOnly: true },
     },
+    {
+      path: '/inventory/item-cards',
+      name: 'item-cards',
+      component: () => import('@/views/module/inventory/ItemCardsView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/inventory/warehouses',
+      name: 'warehouses',
+      component: () => import('@/views/module/inventory/WarehousesView.vue'),
+      meta: { requiresAuth: true },
+    },
   ],
 })
 

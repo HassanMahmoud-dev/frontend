@@ -84,6 +84,7 @@
                 fetchUsers()
               }
             "
+            @refresh="fetchUsers"
             @edit="openEditModal"
             @delete="(row) => handleDelete(row.USER_ID)"
           >
@@ -156,6 +157,7 @@
             empty-text="لا يوجد مستخدمين متصلين"
             :show-edit-action="false"
             :show-delete-action="false"
+            @refresh="fetchConnectedUsers"
           >
             <template #cell-AVATAR="{ row }">
               <div class="flex items-center gap-3">
